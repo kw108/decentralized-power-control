@@ -78,9 +78,9 @@ load('channel_gain.mat')
 % G_{ij}|A_{ij}|^2 = G_{ij}(Re{A_{ij}}^2 + Im{A_{ij}}^2) computed under
 % specific channel fading models. The actual power received at the receivers is 
 % found by multiplying with the actual power transmitted at the transmitters
-% G_{ij}|A_{ij}|^2p_j. The distance (measured in meter) should be prescribed 
-% beforehand to compute $G_{ij}$, and we frequently omit the attenuation factor
-% 10^{-12.8} for simplicity.
+% G_{ij}|A_{ij}|^2p_j. The distance should be prescribed beforehand to compute 
+% G_{ij}, and we frequently omit the attenuation factor 10^{-12.8} for 
+% simplicity.
 
 % However, this Matlab script generate channel gains only, and save them into 
 % a .mat file for later reuse by Python.
