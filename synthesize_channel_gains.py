@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.io
+import pickle
 
 
 class RandGenerator:
@@ -59,5 +60,8 @@ class RandGenerator:
 if __name__ == '__main__':
     rand_generator = RandGenerator(2, 4, 'channel_gain.mat')
     gain, ue_rates = rand_generator.generate(10, 'rayleigh_gain')
-    print(gain[0, 0, :])
-    print(ue_rates)
+    with open('channel_gain.npy', 'wb') as file:
+        pickle.dump({'gain': gain, 'ue_rates': ue_rates}, file)
+    with open('channel_gain.npy', 'rb') as file:
+        data = pickle.load(file)
+    print(type(data))
