@@ -45,9 +45,14 @@ class RandGenerator:
 
         # copy channel gain for given fading type and compute its squared value
         gain = np.abs(self.channel_gain[fading_type]) ** 2
-        assert num_samples * self.num_aps * self.num_ues ** 2 + offset < len(gain)
-        gain = gain[offset: num_samples * self.num_aps * self.num_ues ** 2 + offset].reshape(
-            (num_samples, self.num_aps, self.num_ues, self.num_ues))
+        try:
+            assert num_samples * self.num_aps * self.num_ues ** 2 + offset < len(gain)
+            gain = gain[offset: num_samples * self.num_aps * self.num_ues ** 2 + offset].reshape(
+                (num_samples, self.num_aps, self.num_ues, self.num_ues))
+        except AssertionError:
+            print(np.shape(gain))
+            gain = np.random.choice(np.ravel(gain), size=(num_samples, self.num_aps, self.num_ues, self.num_ues),
+                                    replace=True)
 
         # compute G matrix. Since 20dB - 25dB SINR value is typically recommended for data networks, we could scale the
         # diagonal entries in G by approximately 10 ** (22.5 / 20) * num_ues to compensate for extra techniques like
