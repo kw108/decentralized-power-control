@@ -5,25 +5,20 @@ import pandas as pd
 
 
 if __name__ == '__main__':
-    # plotting curves with confident intervals
+    # plotting curves with confidence intervals
     pm = np.load('pm.npy')
-    q = np.zeros(shape=(400, 3))
-    for i in range(100):
-        q[i, 0] = i % 10 + 1
-        q[i, 1] = pm[0, i // 10, i % 10]
-        q[i, 2] = 0
-    for i in range(100, 200):
-        q[i, 0] = i % 10 + 1
-        q[i, 1] = pm[1, (i - 100) // 10, i % 10]
-        q[i, 2] = 1
-    for i in range(200, 300):
-        q[i, 0] = i % 10 + 1
-        q[i, 1] = pm[2, (i - 200) // 10, i % 10]
-        q[i, 2] = 2
-    for i in range(300, 400):
-        q[i, 0] = i % 10 + 1
-        q[i, 1] = pm[3, (i - 300) // 10, i % 10]
-        q[i, 2] = 3
-    df = pd.DataFrame(q, columns=['iter', 'power', 'APs'])
+    (num_aps, num_samples, num_iterations) = np.shape(pm)
+    q = np.zeros(shape=(num_aps * num_samples * num_iterations, 3))
+    cnt = 0
+    for i in range(num_aps):
+        for j in range(num_samples):
+            for k in range(num_iterations):
+                q[cnt, 0] = k + 1
+                q[cnt, 1] = np.log(pm[i, j, k])
+                q[cnt, 2] = i + 1
+                cnt += 1
+    df = pd.DataFrame(q, columns=['iterations', 'power (dBm)', 'access point IDs'])
     sns.set_theme(style="darkgrid")
-    sns.lineplot(data=df, x='iter', y='power', hue='APs')
+    sns.lineplot(data=df, x='iterations', y='power (dBm)', hue='access point IDs', ci=68)
+    plt.legend(labels=['ap1', 'ap2', 'ap3', 'ap4'])
+    plt.show()
